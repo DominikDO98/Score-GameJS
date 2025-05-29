@@ -62,10 +62,9 @@
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": true,
     "verbatimModuleSyntax": false,
-    "rootDir": "./src",
     "baseUrl": "./src",
     "outDir": "./dist"
   },
   "exclude": ["node_modules"],
-  "include": ["src/**/*.ts", "env.d.ts"]
+  "include": ["src/**/*.ts", "lib/**/*.ts", "env.d.ts"]
 }
