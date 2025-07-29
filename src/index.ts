@@ -1,7 +1,7 @@
-import { ScoreController } from "controllers/score.controller";
-import { MongoConnectionManager } from "mongo/connectionManager";
-import { RpcConnectionManager } from "../lib/src/broker/connectionManager";
-import { logger } from "../lib/src/logger/logger";
+import { ScoreController } from "./controllers/score.controller.js";
+import { MongoConnectionManager } from "./mongo/connectionManager.js";
+import { RpcConnectionManager } from "../lib/broker/connectionManager.js";
+import { logger } from "../lib/logger/logger.js";
 
 class App {
   private _broker = new RpcConnectionManager();

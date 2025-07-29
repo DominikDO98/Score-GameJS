@@ -1,5 +1,6 @@
-import mongoose, { Connection } from "mongoose";
-import { MongoConnectionManager } from "./connectionManager";
+import mongoose from "mongoose";
+import type { Connection } from "mongoose";
+import { MongoConnectionManager } from "./connectionManager.js";
 
 export class MongoRepository {
   private _connection: Connection | null;
