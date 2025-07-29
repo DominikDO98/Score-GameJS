@@ -1,10 +1,8 @@
 import { Schema } from "mongoose";
 
 export const scoreSchema = new Schema({
-  userId: Schema.ObjectId,
+  userId: Number,
   score: Number,
-});
-
-export const userSchema = new Schema({
   username: String,
+  avatarUrl: String,
 });
