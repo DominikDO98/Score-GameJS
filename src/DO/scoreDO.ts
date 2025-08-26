@@ -1,4 +1,4 @@
-import { IScoreDO } from "types/score";
+import type { IScoreDO } from "../types/score.js";
 
 export class ScoreDO implements IScoreDO {
   public score: number;

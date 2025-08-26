@@ -1,12 +1,12 @@
-import { ConsumeMessage } from "amqplib";
-import { ScoreDO } from "DO/scoreDO";
-import { MongoConnectionManager } from "mongo/connectionManager";
-import { MongoRepository } from "mongo/repository";
-import { scoreSchema } from "mongo/schmas";
-import { ValidationError } from "../../lib/src/errors/validationError";
-import { TMessageSchema as TMessageSchema } from "../../lib/src/rpcValidator/types/rpcValidator";
-import { RPCValidator } from "../../lib/src/rpcValidator/rpcValidator";
-import { logger } from "../../lib/src/logger/logger";
+import type { ConsumeMessage } from "amqplib";
+import { ValidationError } from "../../lib/errors/validationError.js";
+import { logger } from "../../lib/logger/logger.js";
+import { RPCValidator } from "../../lib/rpcValidator/rpcValidator.js";
+import type { TMessageSchema } from "../../lib/rpcValidator/types/rpcValidator.js";
+import { ScoreDO } from "../DO/scoreDO.js";
+import { MongoConnectionManager } from "../mongo/connectionManager.js";
+import { MongoRepository } from "../mongo/repository.js";
+import { scoreSchema } from "../mongo/schmas.js";
 
 const scoreMessageSchema: TMessageSchema = {
   score: {

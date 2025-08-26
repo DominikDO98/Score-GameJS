@@ -1,9 +1,9 @@
-import { ConsumeMessage } from "amqplib";
-import { EQueues } from "enums/queues";
-import { MongoConnectionManager } from "mongo/connectionManager";
-import { ScoreService } from "services/score.service";
-import { RpcConnectionManager } from "../../lib/src/broker/connectionManager";
-import { logger } from "../../lib/src/logger/logger";
+import type { ConsumeMessage } from "amqplib";
+import { EQueues } from "../enums/queues.js";
+import { MongoConnectionManager } from "../mongo/connectionManager.js";
+import { ScoreService } from "../services/score.service.js";
+import { RpcConnectionManager } from "../../lib/broker/connectionManager.js";
+import { logger } from "../../lib/logger/logger.js";
 
 export class ScoreController {
   private _service: ScoreService;
@@ -32,10 +32,12 @@ export class ScoreController {
   async saveScore(replyQ: string, msg: ConsumeMessage | null): Promise<void> {
     try {
       const res = await this._service.saveScore(msg);
-      this._broker.replyCall(replyQ, JSON.stringify(res));
+      const id = msg?.properties.correlationId;
+      await this._broker.replyCall(replyQ, JSON.stringify(res), id);
+      return;
     } catch (err) {
       logger.error(err as string, "Score Controller");
-      this._broker.replyCall(replyQ, JSON.stringify("error"));
+      return;
     }
   }
   async getPersonalHighest(
@@ -44,22 +46,26 @@ export class ScoreController {
   ): Promise<void> {
     try {
       const top10 = await this._service.getHighestForPlayer(msg);
-      this._broker.replyCall(replyQ, JSON.stringify(top10));
+      const id = msg?.properties.correlationId;
+      await this._broker.replyCall(replyQ, JSON.stringify(top10), id);
+      return;
     } catch (err) {
       logger.error(err as string, "Score Controller");
-      this._broker.replyCall(replyQ, JSON.stringify("error"));
+      return;
     }
   }
   async getLeaderboard(
     replyQ: string,
-    _msg: ConsumeMessage | null
+    msg: ConsumeMessage | null
   ): Promise<void> {
     try {
       const top10 = await this._service.getLeaderboard();
-      this._broker.replyCall(replyQ, JSON.stringify(top10));
+      const id = msg?.properties.correlationId;
+      await this._broker.replyCall(replyQ, JSON.stringify(top10), id);
+      return;
     } catch (err) {
       logger.error(err as string, "Score Controller");
-      this._broker.replyCall(replyQ, JSON.stringify("error"));
+      return;
     }
   }
 }
