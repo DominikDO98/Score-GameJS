@@ -1,0 +1,18 @@
+options:
+  - logging: CLOUD_LOGGING_ONLY
+steps:
+  - name: "gcr.io/cloud-builders/git"
+    args:
+      [
+        "clone",
+        "--branch",
+        "main",
+        "git@github.com:DominikDO98/deploy.git",
+        "deploy",
+      ]
+
+  - name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - "gcloud builds submit deploy --config deploy/cloudbuild.yaml"
