@@ -7,7 +7,7 @@ declare global {
 
       RABBITMQ_DEFAULT_PASS: string;
       RABBITMQ_DEFAULT_USER: string;
-      RABBITMQ_PRIVATE_URL: string;
+      RABBITMQ_URL: string;
 
       TIMEOUT: string;
     }
