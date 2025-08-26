@@ -1,5 +1,5 @@
-import { logger } from "../../lib/src/logger/logger";
-import { MongoConnection } from "./connection";
+import { logger } from "../../lib/logger/logger.js";
+import { MongoConnection } from "./connection.js";
 
 export class MongoConnectionManager {
   public isAlive: boolean = false;

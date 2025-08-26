@@ -1,7 +1,8 @@
 import "dotenv/config";
-import mongoose, { Connection } from "mongoose";
-import { logger } from "../../lib/src/logger/logger";
-import { ValidationError } from "../../lib/src/errors/validationError";
+import mongoose from "mongoose";
+import type { Connection } from "mongoose";
+import { logger } from "../../lib/logger/logger.js";
+import { ValidationError } from "../../lib/errors/validationError.js";
 
 export class MongoConnection {
   private _connection: Connection | null = null;
@@ -26,6 +27,8 @@ export class MongoConnection {
         return this._connection;
       })
       .catch((e) => {
+        console.log(process.env.MONGODB_URI);
+
         logger.error(e as string, "Mongo Connection", true);
       });
   }
