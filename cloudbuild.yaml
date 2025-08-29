@@ -2,20 +2,45 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 timeout: "1200s"
-  
+
 steps:
-  - name: "gcr.io/cloud-builders/git"
+  # Build Docker image
+  - name: "gcr.io/cloud-builders/docker"
     args:
       [
-        "clone",
-        "--branch",
-        "main",
-        "git@github.com:DominikDO98/deploy.git",
-        "deploy",
+        "build",
+        "-t",
+        "us-central1-docker.pkg.dev/${_PROJECT_ID}/game-js-docker/score:latest",
+        ".",
       ]
 
-  - name: "gcr.io/cloud-builders/gcloud"
-    entrypoint: "bash"
+  # Push Docker image
+  - name: "gcr.io/cloud-builders/docker"
     args:
-      - "-c"
-      - "gcloud builds submit deploy --config deploy/cloudbuild.yaml"
+      [
+        "push",
+        "us-central1-docker.pkg.dev/${_PROJECT_ID}/game-js-docker/score:latest",
+      ]
+
+  # SSH into VM and deploy
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        # Fetch SSH key from Secret Manager
+        gcloud secrets versions access latest --secret=score-game-github-key > score_id_ed25519
+        chmod 600 score_id_ed25519
+
+        # Start ssh-agent and add key
+        eval $(ssh-agent -s)
+        ssh-add score_id_ed25519
+
+        # Skip host key checking
+        mkdir -p ~/.ssh
+        echo "Host *" >> ~/.ssh/config
+        echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+
+        # SSH to VM and deploy
+        gcloud compute ssh vm-mongo-rabbit \
+          --command "cd ~/docker && ./deploy.sh"
